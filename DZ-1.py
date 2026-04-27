@@ -1,0 +1,59 @@
+users = [
+    {"id": 1, "username": "admin", "role": "admin"},
+    {"id": 2, "username": "john", "role": "user"},
+    {"id": 3, "username": "anna", "role": "moderator"},
+    {"id": 4, "username": "kate", "role": "user"},
+    {"id": 5, "username": "root", "role": "admin"},
+    {"id": 6, "username": "max", "role": "user"},
+    {"id": 7, "username": "olena", "role": "moderator"},
+    {"id": 8, "username": "guest", "role": "guest"},
+    {"id": 9, "username": "admin_assistant", "role": "user"},
+    {"id": 10, "username": "superadmin", "role": "admin"}
+]
+
+# 1 Побудувати словник analytics,
+# у якому для кожної ролі зберігаються:
+# загальна кількість користувачів із цією роллю;
+# список їхніх username;
+# мінімальний і максимальний id у межах цієї ролі.
+analytics = {}
+
+for user in users:
+    role = user["role"]
+
+    if role not in analytics:
+        analytics[role] = {
+            "count": 0,
+            "usernames": [],
+            "min_id": user["id"],
+            "max_id": user["id"]
+        }
+
+    analytics[role]["count"] += 1
+    analytics[role]["usernames"].append(user["username"])
+
+    analytics[role]["min_id"] = min(analytics[role]["min_id"], user["id"])
+    analytics[role]["max_id"] = max(analytics[role]["max_id"], user["id"])
+
+print(analytics)
+
+
+# 2 Відсортувати користувачів (використати lambda):
+# спочатку за role потім за username
+sorted_users = sorted(users, key=lambda user: (user["role"], user["username"]))
+
+for user in sorted_users:
+    print(user)
+
+# 3 Створити генератор admin_like_users(users),
+# який повертає тільки тих користувачів, у яких:
+# роль дорівнює 'admin';
+# або username містить підрядок 'admin'.
+
+def admin_like_users(users):
+    for user in users:
+        if user["role"] == "admin" or "admin" in user["username"]:
+            yield user
+
+for user in admin_like_users(users):
+    print(user)
